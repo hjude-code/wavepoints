@@ -42,7 +42,6 @@ export class wave{
             for(let i = 0; i < stepCount; i++){
                 let lastPoint = this.points.y.pop()
                 this.points.y.unshift(lastPoint)
-                console.log('shift pos')
             }
 
         }
@@ -50,7 +49,6 @@ export class wave{
             for(let i = 0; i < stepCount; i++){
                 let firstPoint = this.points.y.shift()
                 this.points.y.push(firstPoint)
-                console.log('shift neg')
             }
         }
     }
@@ -60,7 +58,7 @@ export class wave{
 export class compoundWave{
     constructor(){
         this.waves = []
-        this.mergePoints = null
+        this.points = null
         this.resolution = null
         this.length = null
     }
@@ -71,7 +69,7 @@ export class compoundWave{
             throw new Error('wave is required')
         }
 
-        if(this.mergePoints != null && this.length != null && this.resolution != null){
+        if(this.points != null && this.length != null && this.resolution != null){
             if(wave.resolution !== this.resolution){
                 throw new Error(`wave resolution must equal ${this.resolution}. new wave resolution is ${wave.resolution}`)
             }
@@ -89,7 +87,10 @@ export class compoundWave{
     createWave(wave){
         this.resolution = wave.resolution
         this.length = wave.length
-        this.mergePoints = wave.points
+        this.points = {
+            x: wave.points.x.map(point => point),
+            y: wave.points.y.map(point => point)
+        };
         this.waves.push(wave)
     }
 
@@ -97,21 +98,23 @@ export class compoundWave{
 
         let newYPoints = []
 
-        this.waves.forEach((wave=>{
 
+        this.waves.forEach((wave, i)=>{
+
+            // console.log(`newYPoints value before`, newYPoints)
+            // console.log(`pulling wave ${i}`, wave.points.y, wave.points.y.length)
+            
             let addedPoints = wave.points.y.map((point, i)=>{
                 return point + (newYPoints[i] ? newYPoints[i] : 0)
             })
 
-            console.log('added points', addedPoints, wave.points.y)
-            // wave.points.y.forEach((point, i)=>{
-            //     newYPoints[i] = newYPoints[i] ? newYPoints[i] + point :  point
-            // })
-
             newYPoints = addedPoints
-        }))
 
-        this.mergePoints.y = newYPoints
+            // console.log(`new points from merge`, addedPoints)
+        })
+
+        this.points.y = []
+        this.points.y = newYPoints
 
     }
 
