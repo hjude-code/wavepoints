@@ -1,4 +1,7 @@
 const radians = (angle) => {return angle * (Math.PI/180) }
+function createSVGElement(tag) {
+    return document.createElementNS('http://www.w3.org/2000/svg', tag)
+  }
 
 export function generateWaveHeight(percent, amplitude, frequency){
 
@@ -146,6 +149,38 @@ export class compoundWave{
 
         return points
 
+
+    }
+
+    drawSVG({
+        form='circle',
+        type='path',
+        containerID,
+    }={}){
+
+        let container = document.querySelector(containerID)
+
+        if(form === 'circle'){
+
+            let points = this.generateCircularWavePoints()
+
+            if(type === 'path'){
+                let path = ''
+            }
+
+            if(type === 'instances'){
+                for(let i = 0; i < this.resolution; i++){
+                    let instance = createSVGElement('circle')
+                    instance.setAttribute('r', 3)
+                    instance.setAttribute('cX', points[i][0])
+                    instance.setAttribute('cy', points[i][2])
+                    
+                    container.appendChild(instance)
+
+                }
+            }
+
+        }
 
     }
 
