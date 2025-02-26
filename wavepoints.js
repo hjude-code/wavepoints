@@ -127,6 +127,27 @@ export class compoundWave{
 
     }
 
+    generateCircularWavePoints({cX=0, cY=0, radius=100}={}){
+        
+        let points = []
+        let angle = 0;
+        let step = 360/this.resolution
+
+        for (let i = 0; i < this.resolution; i++){
+
+            let ofstRadius = radius + this.points.y[i]
+
+            let x = (Math.sin(radians(angle)) * ofstRadius) + cX
+            let y = (Math.cos(radians(angle)) * ofstRadius) + cY
+
+            points.push([x,y])
+            angle += step
+        }
+
+        return points
+
+
+    }
 
 }
 
