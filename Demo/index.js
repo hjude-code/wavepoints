@@ -7,32 +7,41 @@ function createSVGElement(tag) {
 
 let svg = createSVGElement('svg')
 svg.setAttribute('viewBox', '0 0 400 400')
+svg.setAttribute('id', 'svgWave')
 document.body.appendChild(svg)
 
-let waveResolution = 100
+let waveResolution = 350
 let waveLength = 300
 
 
 let multiwave = new compoundWave()
-multiwave.addWave(new wave({resolution:waveResolution, length:waveLength, amplitude:10, frequency:5}))
-multiwave.addWave(new wave({resolution:waveResolution, length:waveLength, amplitude:10, frequency:2}))
-multiwave.addWave(new wave({resolution:waveResolution, length:waveLength, amplitude:5, frequency:4}))
+multiwave.addWave(new wave({resolution:waveResolution, length:waveLength, amplitude:50, frequency:5}))
+multiwave.addWave(new wave({resolution:waveResolution, length:waveLength, amplitude:30, frequency:2}))
+multiwave.addWave(new wave({resolution:waveResolution, length:waveLength, amplitude:15, frequency:10}))
 
-function drawCircles(){
-
-    svg.innerHTML = ''
-    let points = multiwave.generateCircularWavePoints({cX:200, cY:200})
-
-    for(let i = 0; i < multiwave.resolution; i++){
-    
-        let circle = createSVGElement('circle')
-        circle.setAttribute('r', 3)
-        circle.setAttribute('cx', points[i][0])
-        circle.setAttribute('cy', points[i][1])
-        svg.appendChild(circle) 
-    }
+let drawSVGParams = {
+    containerID: '#svgWave',
+    type: 'path',
+    position: {cx: 200, cy: 200},
 }
-drawCircles()
+
+multiwave.drawSVG(drawSVGParams)
+
+// function drawCircles(){
+
+//     svg.innerHTML = ''
+//     let points = multiwave.generateCircularWavePoints({cX:200, cY:200})
+
+//     for(let i = 0; i < multiwave.resolution; i++){
+    
+//         let circle = createSVGElement('circle')
+//         circle.setAttribute('r', 3)
+//         circle.setAttribute('cx', points[i][0])
+//         circle.setAttribute('cy', points[i][1])
+//         svg.appendChild(circle) 
+//     }
+// }
+// drawCircles()
 
 window.addEventListener('keypress', (e)=>{
     if(e.key === 'a'){
@@ -42,7 +51,7 @@ window.addEventListener('keypress', (e)=>{
         multiwave.shiftWavePhase(0, -0.05)
     }
     
-    drawCircles()
+    multiwave.drawSVG(drawSVGParams)
 })
 
 

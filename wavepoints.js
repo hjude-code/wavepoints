@@ -6,8 +6,8 @@ function createSVGElement(tag) {
 export function generateWaveHeight(percent, amplitude, frequency){
 
     let angle = percent/100 * 360
-
-    return Math.floor(Math.cos(radians(angle)*frequency) * amplitude)
+    let waveHeightValue = Math.cos(radians(angle)*frequency) * amplitude
+    return Number(waveHeightValue.toFixed(3))
 }
 
 export class wave{
@@ -103,12 +103,9 @@ export class compoundWave{
 
 
         this.waves.forEach((wave, i)=>{
-
-            // console.log(`newYPoints value before`, newYPoints)
-            // console.log(`pulling wave ${i}`, wave.points.y, wave.points.y.length)
-            
             let addedPoints = wave.points.y.map((point, i)=>{
-                return point + (newYPoints[i] ? newYPoints[i] : 0)
+                let newPoint = point + (newYPoints[i] ? newYPoints[i] : 0)
+                return Number(newPoint.toFixed(3))
             })
 
             newYPoints = addedPoints
@@ -130,7 +127,7 @@ export class compoundWave{
 
     }
 
-    generateCircularWavePoints({cX=0, cY=0, radius=100}={}){
+    generateCircularWavePoints({cx=0, cy=0, radius=100}={}){
         
         let points = []
         let angle = 0;
@@ -140,8 +137,10 @@ export class compoundWave{
 
             let ofstRadius = radius + this.points.y[i]
 
-            let x = (Math.sin(radians(angle)) * ofstRadius) + cX
-            let y = (Math.cos(radians(angle)) * ofstRadius) + cY
+            let x = (Math.sin(radians(angle)) * ofstRadius) + cx
+            x = Number(x.toFixed(1))
+            let y = (Math.cos(radians(angle)) * ofstRadius) + cy
+            y = Number(y.toFixed(1))
 
             points.push([x,y])
             angle += step
@@ -155,32 +154,62 @@ export class compoundWave{
     drawSVG({
         form='circle',
         type='path',
+        position={
+            cx:0, cy:0
+        },
         containerID,
     }={}){
 
-        let container = document.querySelector(containerID)
+        let container
 
+        if(containerID){
+            container = document.querySelector(containerID)
+            container.innerHTML = ''
+        }else{
+            throw new Error('containerID is required')
+        }
+
+        let points
         if(form === 'circle'){
-
-            let points = this.generateCircularWavePoints()
+            points = this.generateCircularWavePoints({cx:position.cx, cy:position.cy})
+        }
 
             if(type === 'path'){
-                let path = ''
+                let path = createSVGElement('path')
+                path.setAttribute('fill', 'none')
+                path.setAttribute('stroke', 'black')
+                path.setAttribute('stroke-width', 1)
+                let d = ''
+
+                points.forEach((point, i)=>{
+                    if(i === 0){
+                        d += `M ${point[0]} ${point[1]} `
+                    }else{
+                        d += `L ${point[0]} ${point[1]} `
+                    }
+                    
+                })
+                d += 'Z'
+
+                path.setAttribute('d', d)
+                container.appendChild(path)
+
+                
             }
 
             if(type === 'instances'){
                 for(let i = 0; i < this.resolution; i++){
                     let instance = createSVGElement('circle')
                     instance.setAttribute('r', 3)
-                    instance.setAttribute('cX', points[i][0])
-                    instance.setAttribute('cy', points[i][2])
+                    instance.setAttribute('cx', points[i][0])
+                    instance.setAttribute('cy', points[i][1])
+                    instance.setAttribute('fill', 'red')
                     
                     container.appendChild(instance)
-
                 }
             }
 
-        }
+        
 
     }
 
