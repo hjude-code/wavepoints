@@ -21,7 +21,7 @@ multiwave.addWave(new wave({resolution:waveResolution, length:waveLength, amplit
 
 let drawSVGParams = {
     containerID: '#svgWave',
-    type: 'path',
+    type: 'instances',
     position: {cx: 200, cy: 200},
 }
 

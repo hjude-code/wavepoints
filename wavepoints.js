@@ -154,6 +154,13 @@ export class compoundWave{
     drawSVG({
         form='circle',
         type='path',
+        instance={
+            tag:'circle',
+            attributes:{
+                r:3
+            }
+        },
+        attributes={},
         position={
             cx:0, cy:0
         },
