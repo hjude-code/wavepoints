@@ -9,7 +9,7 @@ svg.setAttribute('viewBox', '0 0 400 400')
 svg.setAttribute('id', 'svgWave')
 document.body.appendChild(svg)
 
-let waveResolution = 400
+let waveResolution = 300
 let waveLength = 300
 let muffleArr = [
     {start:0, end:0.75, amount:0, taper:[0.25, 0.25]},
@@ -17,10 +17,10 @@ let muffleArr = [
 
 
 let multiwave = new wp.compoundWave()
-multiwave.addWave(new wp.wave({resolution:waveResolution, span:{start:0, end:0.5, taper:[0.25]}, length:waveLength, amplitude:20, frequency:5}))
+multiwave.addWave(new wp.wave({resolution:waveResolution, span:{start:0, end:0.5, taper:[0.25]}, length:waveLength, amplitude:20, frequency:6}))
 multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:30, frequency:3}))
 // multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:15, frequency:10}))
-// multiwave.mufflePoints(muffleArr)
+multiwave.mufflePoints(muffleArr)
 
 
 
@@ -41,10 +41,10 @@ wp.drawSVG(drawSVGParams_iso)
 
 window.addEventListener('keypress', (e)=>{
     if(e.key === 'a'){
-        multiwave.shiftWavePhase(0, 0.05)
+        multiwave.shiftWavePhase(0, 0.01)
     }
     if(e.key === 's'){
-        multiwave.shiftWavePhase(0, -0.05)
+        multiwave.shiftWavePhase(0, -0.01)
     }
     
     wp.drawSVG(drawSVGParams_iso)

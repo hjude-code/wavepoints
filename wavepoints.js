@@ -196,7 +196,8 @@ export class compoundWave{
         this.points.y = newYPoints
 
         if(this.muffle && this.muffle.length > 0){
-            mufflePoints(this, this.muffle)
+            this.points. y = mufflePoints(this, this.muffle)
+            // this.points.y 
         }
     }
 
@@ -209,10 +210,10 @@ export class compoundWave{
 
     }
 
-    muffleWavePoints(waveIndex, muffle){
-        this.waves[waveIndex].mufflePoints(muffle)
-        this.mergeWaves()
-    }
+    // muffleWavePoints(waveIndex, muffle){
+    //     this.waves[waveIndex].mufflePoints(muffle)
+    //     this.mergeWaves()
+    // }
 
 }
 
@@ -319,7 +320,7 @@ export function mufflePoints(wave, newMuffle){
     if(newMuffle){
         wave.muffle = newMuffle
     }
-
+    let newPoints = wave.points.y.map(point => point)
     wave.muffle.forEach((muffle)=>{
         let startMuffle = muffle.start * wave.resolution
         let endMuffle = muffle.end * wave.resolution
@@ -345,9 +346,10 @@ export function mufflePoints(wave, newMuffle){
                 input: i
             })
 
-            wave.points.y[i] = wave.points.y[i] * taperMuffle
+            newPoints[i] = wave.points.y[i] * taperMuffle
         }
     })
+    return newPoints
 }
 
 
