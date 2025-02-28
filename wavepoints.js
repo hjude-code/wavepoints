@@ -66,7 +66,6 @@ export class wave{
         this.amplitude = amplitude
         this.frequency = frequency
         this.span = span,
-        this.muffle = [], //takes objects with start, end, and taper properties
         this.points = this.generateBaseWave({resolution, length, amplitude, frequency})
     }
 
@@ -184,7 +183,15 @@ export class compoundWave{
 
 
         this.waves.forEach((wave, i)=>{
-            let addedPoints = wave.points.y.map((point, i)=>{
+
+            let wavePoints = wave.points.y
+
+            if(wave.muffle){
+                console.log(wave.muffle)
+                wavePoints = mufflePoints(wave)
+            }
+
+            let addedPoints = wavePoints.map((point, i)=>{
                 let newPoint = point + (newYPoints[i] ? newYPoints[i] : 0)
                 return Number(newPoint.toFixed(3))
             })
@@ -197,7 +204,6 @@ export class compoundWave{
 
         if(this.muffle && this.muffle.length > 0){
             this.points. y = mufflePoints(this, this.muffle)
-            // this.points.y 
         }
     }
 
@@ -210,10 +216,10 @@ export class compoundWave{
 
     }
 
-    // muffleWavePoints(waveIndex, muffle){
-    //     this.waves[waveIndex].mufflePoints(muffle)
-    //     this.mergeWaves()
-    // }
+    muffleWavePoints(waveIndex, muffle){
+        this.waves[waveIndex].muffle = muffle
+        this.mergeWaves()
+    }
 
 }
 
