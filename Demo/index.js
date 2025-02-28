@@ -12,20 +12,17 @@ document.body.appendChild(svg)
 let waveResolution = 400
 let waveLength = 300
 let muffleArr = [
-    {start:0.25, end:1, amount:0, taper:0.25},
+    {start:0, end:0.75, amount:0, taper:[0.25, 0.25]},
 ]
 
 
 let multiwave = new wp.compoundWave()
-multiwave.addWave(new wp.wave({resolution:waveResolution, span:{start:0, end:1}, length:waveLength, amplitude:20, frequency:21}))
-multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:30, frequency:3}))
-multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:15, frequency:10}))
-multiwave.mufflePoints(muffleArr)
+multiwave.addWave(new wp.wave({resolution:waveResolution, span:{start:0, end:0.5, taper:[0.25]}, length:waveLength, amplitude:20, frequency:21}))
+// multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:30, frequency:3}))
+// multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:15, frequency:10}))
+// multiwave.mufflePoints(muffleArr)
 
 
-
-// multiwave.muffleWavePoints(0, muffleArr)
-// wp.mufflePoints(multiwave, muffleArr)
 
 let drawSVGParams = {
     containerID: '#svgWave',

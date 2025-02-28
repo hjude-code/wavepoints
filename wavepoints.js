@@ -3,8 +3,40 @@ function createSVGElement(tag) {
     return document.createElementNS('http://www.w3.org/2000/svg', tag)
   }
 
-function taper(){
+function lerp(start, end, t) {
+return (1 - t) * start + t * end;
+}
+
+export function taper({
+    range = [0, 100],
+    taper = [0.25, 0.25],
+    outMin = 0,
+    outMax = 1,
+    input = 50
+}={}){
+
+    let length = range[1] - range[0]
+    let startTaper = range[0] + (taper[0] * length)
+    let endTaper
+    if(taper[1]){
+        endTaper = range[1] - (taper[1] * length)
+    }else{
+        endTaper = range[1] - (taper[0] * length)
+    }
+
+    let taperAmount
+    if(input < startTaper){
+        taperAmount = (input-range[0]) / (startTaper-range[0])
+        return lerp(outMax, outMin, taperAmount)
+    }
+    if(input > endTaper){
+        taperAmount = (input-endTaper) / (range[1]-endTaper)
+        return lerp(outMin, outMax, taperAmount)
+    }
+    return outMin
     
+
+
 }
 
 
@@ -149,8 +181,6 @@ export class compoundWave{
             })
 
             newYPoints = addedPoints
-
-            // console.log(`new points from merge`, addedPoints)
         })
 
         this.points.y = []
@@ -284,9 +314,29 @@ export function mufflePoints(wave, newMuffle){
     wave.muffle.forEach((muffle)=>{
         let startMuffle = muffle.start * wave.resolution
         let endMuffle = muffle.end * wave.resolution
+        let muffleLength = endMuffle - startMuffle
 
+        let startTaper = startMuffle + (muffle.taper[0] * muffleLength)
+        let endTaper
+        if(muffle.taper[1]){
+            endTaper = endMuffle - (muffle.taper[1] * muffleLength)
+        }else{
+            endTaper = endMuffle - (muffle.taper[0] * muffleLength)
+        }
+
+
+        
         for(let i = startMuffle; i < endMuffle; i++){
-            wave.points.y[i] = wave.points.y[i] * muffle.amount
+
+            let taperMuffle = taper({
+                range: [startMuffle, endMuffle],
+                taper: muffle.taper,
+                outMin: muffle.amount,
+                outMax: 1, 
+                input: i
+            })
+
+            wave.points.y[i] = wave.points.y[i] * taperMuffle
         }
     })
 }
