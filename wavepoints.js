@@ -3,6 +3,13 @@ function createSVGElement(tag) {
     return document.createElementNS('http://www.w3.org/2000/svg', tag)
   }
 
+function taper(){
+    
+}
+
+
+
+
 export function generateWaveHeight(percent, amplitude, frequency){
 
     let angle = percent/100 * 360
@@ -25,11 +32,14 @@ export class wave{
         this.length = length
         this.amplitude = amplitude
         this.frequency = frequency
-        this.span = span
+        this.span = span,
+        this.muffle = [], //takes objects with start, end, and taper properties
         this.points = this.generateBaseWave({resolution, length, amplitude, frequency})
     }
 
     generateBaseWave({resolution=10, length=100, amplitude=10, frequency=3}={}){
+        this.points = {}
+
         let x = 0;
         let step = length/resolution
 
@@ -48,17 +58,14 @@ export class wave{
 
             let y = 0
             if(i >= startWave && i <= endWave){
-
                 let percent = Math.abs(startWave-i) /waveLength * 100
-                console.log(i, percent)
                 y = generateWaveHeight(percent, amplitude, frequency)
             }
 
             points.x.push(x)
             points.y.push(y)
             x+=step
-
-
+            
         }
 
         return points
@@ -125,6 +132,11 @@ export class compoundWave{
         this.waves.push(wave)
     }
 
+    mufflePoints(muffle){
+        this.muffle = muffle
+        this.mergeWaves()
+    }
+
     mergeWaves(){
 
         let newYPoints = []
@@ -144,6 +156,9 @@ export class compoundWave{
         this.points.y = []
         this.points.y = newYPoints
 
+        if(this.muffle && this.muffle.length > 0){
+            mufflePoints(this, this.muffle)
+        }
     }
 
     shiftWavePhase(waveIndex, shiftBy){
@@ -153,6 +168,11 @@ export class compoundWave{
         this.waves[waveIndex].shiftPhase(shiftBy)
         this.mergeWaves()
 
+    }
+
+    muffleWavePoints(waveIndex, muffle){
+        this.waves[waveIndex].mufflePoints(muffle)
+        this.mergeWaves()
     }
 
 }
@@ -254,3 +274,21 @@ export function drawSVG({
     
 
 }
+
+export function mufflePoints(wave, newMuffle){
+
+    if(newMuffle){
+        wave.muffle = newMuffle
+    }
+
+    wave.muffle.forEach((muffle)=>{
+        let startMuffle = muffle.start * wave.resolution
+        let endMuffle = muffle.end * wave.resolution
+
+        for(let i = startMuffle; i < endMuffle; i++){
+            wave.points.y[i] = wave.points.y[i] * muffle.amount
+        }
+    })
+}
+
+
