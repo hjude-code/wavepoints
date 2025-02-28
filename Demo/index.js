@@ -1,4 +1,4 @@
-import { wave, compoundWave } from '../wavepoints.js';
+import * as wp from '../wavepoints.js';
 
 function createSVGElement(tag) {
     return document.createElementNS('http://www.w3.org/2000/svg', tag)
@@ -14,10 +14,10 @@ let waveResolution = 350
 let waveLength = 300
 
 
-let multiwave = new compoundWave()
-multiwave.addWave(new wave({resolution:waveResolution, length:waveLength, amplitude:50, frequency:5}))
-multiwave.addWave(new wave({resolution:waveResolution, length:waveLength, amplitude:30, frequency:2}))
-multiwave.addWave(new wave({resolution:waveResolution, length:waveLength, amplitude:15, frequency:10}))
+let multiwave = new wp.compoundWave()
+multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:50, frequency:5}))
+multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:30, frequency:2}))
+multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:15, frequency:10}))
 
 let drawSVGParams = {
     containerID: '#svgWave',
