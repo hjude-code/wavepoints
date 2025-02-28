@@ -11,28 +11,50 @@ export function generateWaveHeight(percent, amplitude, frequency){
 }
 
 export class wave{
-    constructor({resolution=10, length=100, amplitude=10, frequency=3}={}){
+    constructor({
+        resolution=10,
+        length=100,
+        amplitude=10,
+        frequency=3,
+        span={
+            start:0,
+            end:1
+        }
+    }={}){
         this.resolution = resolution
         this.length = length
         this.amplitude = amplitude
         this.frequency = frequency
+        this.span = span
         this.points = this.generateBaseWave({resolution, length, amplitude, frequency})
     }
 
     generateBaseWave({resolution=10, length=100, amplitude=10, frequency=3}={}){
         let x = 0;
         let step = length/resolution
+
+        let startWave = resolution*this.span.start
+        let endWave = resolution*this.span.end
+        let waveLength = endWave-startWave
         let points = {
             x: [],
             y: []
         };
         for(let i = 0; i < resolution; i++){
-            let percent = x/length * 100
-            let y = generateWaveHeight(percent, amplitude, frequency)
+           
+
+            let y = 0
+            if(i >= startWave && i <= endWave){
+
+                let percent = x/length * 100
+                y = generateWaveHeight(percent, amplitude, frequency)
+            }
+
             points.x.push(x)
             points.y.push(y)
             x+=step
         }
+
         return points
     }
 
