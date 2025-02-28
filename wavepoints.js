@@ -58,7 +58,7 @@ export class wave{
         span={
             start:0,
             end:1,
-            taper:[0.25, 0.25]
+            taper:[0, 0]
         }
     }={}){
         this.resolution = resolution
@@ -187,7 +187,6 @@ export class compoundWave{
             let wavePoints = wave.points.y
 
             if(wave.muffle){
-                console.log(wave.muffle)
                 wavePoints = mufflePoints(wave)
             }
 

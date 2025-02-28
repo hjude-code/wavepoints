@@ -12,13 +12,13 @@ document.body.appendChild(svg)
 let waveResolution = 300
 let waveLength = 300
 let muffleArr = [
-    {start:0, end:0.75, amount:0, taper:[0.25, 0.25]},
+    {start:0, end:0.95, amount:0, taper:[0.1, 0.1]},
 ]
 
 
 let multiwave = new wp.compoundWave()
-multiwave.addWave(new wp.wave({resolution:waveResolution, span:{start:0, end:1, taper:[0.25]}, length:waveLength, amplitude:20, frequency:6}))
-multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:30, frequency:3}))
+multiwave.addWave(new wp.wave({resolution:waveResolution, span:{start:0, end:1, taper:[0]}, length:waveLength, amplitude:20, frequency:8}))
+multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:10, frequency:3}))
 // multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:15, frequency:10}))
 // multiwave.mufflePoints(muffleArr)
 multiwave.muffleWavePoints(0, muffleArr)
