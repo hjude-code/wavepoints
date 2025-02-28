@@ -1,5 +1,9 @@
 import * as wp from '../wavepoints.js';
 
+import GUI from 'https://cdn.jsdelivr.net/npm/lil-gui@0.20/+esm';
+const gui = new GUI();
+gui.add( document, 'title' );
+
 function createSVGElement(tag) {
     return document.createElementNS('http://www.w3.org/2000/svg', tag)
   }
