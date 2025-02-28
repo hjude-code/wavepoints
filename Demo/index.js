@@ -1,17 +1,40 @@
 import * as wp from '../wavepoints.js';
-
 import GUI from 'https://cdn.jsdelivr.net/npm/lil-gui@0.20/+esm';
 const gui = new GUI();
-gui.add( document, 'title' );
+const waveParameters = {
+    addWave: ()=>{addWave()},
+    waves:[],
+    fakeNum:10
+};
+gui.add( waveParameters, 'addWave' ).onChange(()=>{wp.drawSVG(drawSVGParams_iso)});  // Checkbox
 
+// create SVG element
 function createSVGElement(tag) {
     return document.createElementNS('http://www.w3.org/2000/svg', tag)
-  }
-
+}
 let svg = createSVGElement('svg')
 svg.setAttribute('viewBox', '0 0 400 400')
 svg.setAttribute('id', 'svgWave')
 document.body.appendChild(svg)
+
+// create empty multiwave
+let multiwave = new wp.compoundWave()
+
+function addWave(){
+    let waveIndex = multiwave.waves.length
+    multiwave.addWave(new wp.wave({resolution:100}))
+    
+    const newWaveParameters = {
+        frequency: 3,
+        amplitude: 10
+    }
+
+    let folder = gui.addFolder(`wave ${waveIndex}`)
+    folder.add( newWaveParameters, 'frequency').onChange(()=>{multiwave.upateChildWave(waveIndex, newWaveParameters)})
+    folder.add( newWaveParameters, 'amplitude').onChange(()=>{multiwave.upateChildWave(waveIndex, newWaveParameters)})
+}
+addWave()
+// multiwave.upateChildWave(0, {frequency:3})
 
 let waveResolution = 300
 let waveLength = 300
@@ -20,12 +43,10 @@ let muffleArr = [
 ]
 
 
-let multiwave = new wp.compoundWave()
-multiwave.addWave(new wp.wave({resolution:waveResolution, span:{start:0, end:1, taper:[0]}, length:waveLength, amplitude:20, frequency:8}))
-multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:10, frequency:3}))
+// multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:10, frequency:3}))
 // multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:15, frequency:10}))
 // multiwave.mufflePoints(muffleArr)
-multiwave.muffleWavePoints(0, muffleArr)
+// multiwave.muffleWavePoints(0, muffleArr)
 
 
 
@@ -54,5 +75,10 @@ window.addEventListener('keypress', (e)=>{
     
     wp.drawSVG(drawSVGParams_iso)
 })
+
+
+
+
+
 
 

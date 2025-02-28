@@ -69,9 +69,9 @@ export class wave{
         this.points = this.generateBaseWave({resolution, length, amplitude, frequency})
     }
 
-    generateBaseWave({resolution=10, length=100, amplitude=10, frequency=3}={}){
+    generateBaseWave({resolution=100, length=100, amplitude=10, frequency=3}={}){
         this.points = {}
-
+        console.log(amplitude)
         let x = 0;
         let step = length/resolution
 
@@ -107,8 +107,11 @@ export class wave{
             x+=step
             
         }
-
         return points
+    }
+
+    updateWave(params){
+        this.points = this.generateBaseWave(params)
     }
 
     shiftPhase(shiftBy=0.1){ //shiftby percent of the wave length
@@ -218,6 +221,18 @@ export class compoundWave{
     muffleWavePoints(waveIndex, muffle){
         this.waves[waveIndex].muffle = muffle
         this.mergeWaves()
+    }
+
+    upateChildWave(waveIndex, params){
+        this.waves[waveIndex].updateWave(params)
+        this.mergeWaves()
+    }
+
+    updateResolution(newResolution){
+        this.resolution = newResolution
+        this.waves.forEach((wave)=>{
+            wave.resolution = this.resolution
+        })
     }
 
 }
