@@ -57,7 +57,8 @@ export class wave{
         frequency=3,
         span={
             start:0,
-            end:1
+            end:1,
+            taper:[0.25, 0.25]
         }
     }={}){
         this.resolution = resolution
@@ -91,7 +92,15 @@ export class wave{
             let y = 0
             if(i >= startWave && i <= endWave){
                 let percent = Math.abs(startWave-i) /waveLength * 100
-                y = generateWaveHeight(percent, amplitude, frequency)
+                let yMax = generateWaveHeight(percent, amplitude, frequency)
+
+                y = taper({
+                    range: [startWave, endWave],
+                    taper: this.span.taper,
+                    outMin: yMax,
+                    outMax: 0,
+                    input: i
+                })
             }
 
             points.x.push(x)

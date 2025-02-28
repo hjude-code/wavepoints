@@ -17,8 +17,8 @@ let muffleArr = [
 
 
 let multiwave = new wp.compoundWave()
-multiwave.addWave(new wp.wave({resolution:waveResolution, span:{start:0, end:0.5, taper:[0.25]}, length:waveLength, amplitude:20, frequency:21}))
-// multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:30, frequency:3}))
+multiwave.addWave(new wp.wave({resolution:waveResolution, span:{start:0, end:0.5, taper:[0.25]}, length:waveLength, amplitude:20, frequency:5}))
+multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:30, frequency:3}))
 // multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:15, frequency:10}))
 // multiwave.mufflePoints(muffleArr)
 
