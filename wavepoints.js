@@ -6,7 +6,7 @@ function createSVGElement(tag) {
 export function generateWaveHeight(percent, amplitude, frequency){
 
     let angle = percent/100 * 360
-    let waveHeightValue = Math.cos(radians(angle)*frequency) * amplitude
+    let waveHeightValue = Math.sin(radians(angle)*frequency) * amplitude
     return Number(waveHeightValue.toFixed(3))
 }
 
@@ -40,19 +40,25 @@ export class wave{
             x: [],
             y: []
         };
+
+        // console.log(waveLength)
+
         for(let i = 0; i < resolution; i++){
            
 
             let y = 0
             if(i >= startWave && i <= endWave){
 
-                let percent = x/length * 100
+                let percent = Math.abs(startWave-i) /waveLength * 100
+                console.log(i, percent)
                 y = generateWaveHeight(percent, amplitude, frequency)
             }
 
             points.x.push(x)
             points.y.push(y)
             x+=step
+
+
         }
 
         return points

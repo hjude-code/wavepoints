@@ -9,16 +9,13 @@ svg.setAttribute('viewBox', '0 0 400 400')
 svg.setAttribute('id', 'svgWave')
 document.body.appendChild(svg)
 
-let waveResolution = 350
+let waveResolution = 400
 let waveLength = 300
 
-let basicWave = new wp.wave({resolution:waveResolution, length:waveLength, amplitude:20, frequency:8})
-console.log(basicWave)
-
 let multiwave = new wp.compoundWave()
-multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:50, frequency:5}))
-multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:30, frequency:2}))
-multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:15, frequency:10}))
+multiwave.addWave(new wp.wave({resolution:waveResolution, span:{start:0, end:0.5}, length:waveLength, amplitude:20, frequency:10}))
+// multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:30, frequency:3}))
+// multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:15, frequency:10}))
 
 let drawSVGParams = {
     containerID: '#svgWave',
@@ -26,9 +23,9 @@ let drawSVGParams = {
     position: {cx: 200, cy: 200},
 }
 let drawSVGParams_iso = {
-    wave:basicWave,
+    wave:multiwave,
     containerID: '#svgWave',
-    type: 'instances',
+    type: 'path',
     position: {cx: 200, cy: 200},
 }
 
@@ -43,7 +40,7 @@ window.addEventListener('keypress', (e)=>{
         multiwave.shiftWavePhase(0, -0.05)
     }
     
-    // wp.drawSVG(drawSVGParams_iso)
+    wp.drawSVG(drawSVGParams_iso)
 })
 
 
