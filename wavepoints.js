@@ -127,98 +127,102 @@ export class compoundWave{
 
     }
 
-    generateCircularWavePoints({cx=0, cy=0, radius=100}={}){
+}
+
+export function generateCircularWavePoints({wave, cx=0, cy=0, radius=100}={}){
         
-        let points = []
-        let angle = 0;
-        let step = 360/this.resolution
+    let points = []
+    let angle = 0;
+    let step = 360/wave.resolution
 
-        for (let i = 0; i < this.resolution; i++){
+    for (let i = 0; i < wave.resolution; i++){
 
-            let ofstRadius = radius + this.points.y[i]
+        let ofstRadius = radius + wave.points.y[i]
 
-            let x = (Math.sin(radians(angle)) * ofstRadius) + cx
-            x = Number(x.toFixed(1))
-            let y = (Math.cos(radians(angle)) * ofstRadius) + cy
-            y = Number(y.toFixed(1))
+        let x = (Math.sin(radians(angle)) * ofstRadius) + cx
+        x = Number(x.toFixed(1))
+        let y = (Math.cos(radians(angle)) * ofstRadius) + cy
+        y = Number(y.toFixed(1))
 
-            points.push([x,y])
-            angle += step
-        }
-
-        return points
-
-
+        points.push([x,y])
+        angle += step
     }
 
-    drawSVG({
-        form='circle',
-        type='path',
-        instance={
-            tag:'circle',
-            attributes:{
-                r:3
-            }
-        },
-        attributes={},
-        position={
-            cx:0, cy:0
-        },
-        containerID,
-    }={}){
+    return points
 
-        let container
-
-        if(containerID){
-            container = document.querySelector(containerID)
-            container.innerHTML = ''
-        }else{
-            throw new Error('containerID is required')
-        }
-
-        let points
-        if(form === 'circle'){
-            points = this.generateCircularWavePoints({cx:position.cx, cy:position.cy})
-        }
-
-            if(type === 'path'){
-                let path = createSVGElement('path')
-                path.setAttribute('fill', 'none')
-                path.setAttribute('stroke', 'black')
-                path.setAttribute('stroke-width', 1)
-                let d = ''
-
-                points.forEach((point, i)=>{
-                    if(i === 0){
-                        d += `M ${point[0]} ${point[1]} `
-                    }else{
-                        d += `L ${point[0]} ${point[1]} `
-                    }
-                    
-                })
-                d += 'Z'
-
-                path.setAttribute('d', d)
-                container.appendChild(path)
-
-                
-            }
-
-            if(type === 'instances'){
-                for(let i = 0; i < this.resolution; i++){
-                    let instance = createSVGElement('circle')
-                    instance.setAttribute('r', 3)
-                    instance.setAttribute('cx', points[i][0])
-                    instance.setAttribute('cy', points[i][1])
-                    instance.setAttribute('fill', 'red')
-                    
-                    container.appendChild(instance)
-                }
-            }
-
-        
-
-    }
 
 }
 
+
+export function drawSVG({
+    wave,
+    form='circle',
+    type='path',
+    instance={
+        tag:'circle',
+        attributes:{
+            r:3
+        }
+    },
+    attributes={},
+    position={
+        cx:0, cy:0
+    },
+    containerID,
+}={}){
+
+    // console.log('running drawSVG')
+
+    let container
+
+    if(containerID){
+        container = document.querySelector(containerID)
+        container.innerHTML = ''
+        // console.log('svg conatiner created', container)
+    }else{
+        throw new Error('containerID is required')
+    }
+
+    let points
+    if(form === 'circle'){
+        points = generateCircularWavePoints({wave:wave, cx:position.cx, cy:position.cy})
+    }
+
+        if(type === 'path'){
+            let path = createSVGElement('path')
+            path.setAttribute('fill', 'none')
+            path.setAttribute('stroke', 'black')
+            path.setAttribute('stroke-width', 1)
+            let d = ''
+
+            points.forEach((point, i)=>{
+                if(i === 0){
+                    d += `M ${point[0]} ${point[1]} `
+                }else{
+                    d += `L ${point[0]} ${point[1]} `
+                }
+                
+            })
+            d += 'Z'
+
+            path.setAttribute('d', d)
+            container.appendChild(path)
+
+            
+        }
+
+        if(type === 'instances'){
+            for(let i = 0; i < wave.resolution; i++){
+                let instance = createSVGElement('circle')
+                instance.setAttribute('r', 3)
+                instance.setAttribute('cx', points[i][0])
+                instance.setAttribute('cy', points[i][1])
+                instance.setAttribute('fill', 'red')
+                
+                container.appendChild(instance)
+            }
+        }
+
+    
+
+}

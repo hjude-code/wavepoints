@@ -24,8 +24,14 @@ let drawSVGParams = {
     type: 'instances',
     position: {cx: 200, cy: 200},
 }
+let drawSVGParams_iso = {
+    wave:multiwave,
+    containerID: '#svgWave',
+    type: 'instances',
+    position: {cx: 200, cy: 200},
+}
 
-multiwave.drawSVG(drawSVGParams)
+wp.drawSVG(drawSVGParams_iso)
 
 // function drawCircles(){
 
@@ -51,7 +57,7 @@ window.addEventListener('keypress', (e)=>{
         multiwave.shiftWavePhase(0, -0.05)
     }
     
-    multiwave.drawSVG(drawSVGParams)
+    wp.drawSVG(drawSVGParams_iso)
 })
 
 
