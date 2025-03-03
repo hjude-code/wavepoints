@@ -69,9 +69,8 @@ export class wave{
         this.points = this.generateBaseWave({resolution, length, amplitude, frequency})
     }
 
-    generateBaseWave({resolution=100, length=100, amplitude=10, frequency=3}={}){
+    generateBaseWave({resolution=this.resolution, length=this.length, amplitude=this.amplitude, frequency=this.frequency}={}){
         this.points = {}
-        console.log(amplitude)
         let x = 0;
         let step = length/resolution
 
@@ -82,8 +81,6 @@ export class wave{
             x: [],
             y: []
         };
-
-        // console.log(waveLength)
 
         for(let i = 0; i < resolution; i++){
            
@@ -107,14 +104,33 @@ export class wave{
             x+=step
             
         }
+
         return points
     }
 
-    updateWave(params){
-        this.points = this.generateBaseWave(params)
+    updateWave({resolution=this.resolution, length=this.length, amplitude=this.amplitude, frequency=this.frequency}={}){
+        console.log(frequency)
+        if(resolution != this.resolution){
+            this.resolution = resolution
+        }
+        if(length != this.length){
+            this.length = length
+        }
+        if(amplitude != this.amplitude){
+            this.amplitude = amplitude
+        }
+        if(frequency != this.frequency){
+            this.frequency = Math.floor(frequency)
+            console.log(this.frequency)
+        }
+
+        let newPoints = this.generateBaseWave()
+
+        console.log(newPoints)
+        this.points = newPoints
     }
 
-    shiftPhase(shiftBy=0.1){ //shiftby percent of the wave length
+    shiftPhase(shiftBy=0.1){
         
         let stepCount = Math.abs(this.resolution*shiftBy)
 
@@ -223,7 +239,7 @@ export class compoundWave{
         this.mergeWaves()
     }
 
-    upateChildWave(waveIndex, params){
+    updateChildWave(waveIndex, params){
         this.waves[waveIndex].updateWave(params)
         this.mergeWaves()
     }
@@ -279,14 +295,11 @@ export function drawSVG({
     containerID,
 }={}){
 
-    // console.log('running drawSVG')
-
     let container
 
     if(containerID){
         container = document.querySelector(containerID)
         container.innerHTML = ''
-        // console.log('svg conatiner created', container)
     }else{
         throw new Error('containerID is required')
     }
