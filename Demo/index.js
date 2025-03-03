@@ -10,6 +10,16 @@ svg.setAttribute('viewBox', '0 0 400 400')
 svg.setAttribute('id', 'waveBox')
 document.body.appendChild(svg)
 
+const gui = new GUI();
+
+
+
+
+
+
+
+
+
 let multiwave = new wp.compoundWave()
 
 
@@ -21,9 +31,13 @@ let waveLength = 300
 
 const wave1Parameters = {
     frequency:3,
-    amplitude:10,
+    amplitude:30,
     phase:0
-  }
+}
+let wave1Folder = gui.addFolder(`wave 1`)
+wave1Folder.add(wave1Parameters, 'frequency', 0, 20).onChange(()=>{updateMultiwaveWaves(0, wave1Parameters)})
+wave1Folder.add(wave1Parameters, 'amplitude', 0, 200).onChange(()=>{updateMultiwaveWaves(0, wave1Parameters)})
+wave1Folder.add(wave1Parameters, 'phase', 0, 1).onChange(()=>{updateMultiwaveWavesPhase(0, wave1Parameters.phase)})
 multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:wave1Parameters.amplitude, frequency:wave1Parameters.frequency}))
 
 
@@ -32,7 +46,11 @@ const wave2Parameters = {
     amplitude:10,
     phase:0
   }
-multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:10, frequency:20}))
+let wave2Folder = gui.addFolder(`wave 2`)
+wave2Folder.add(wave2Parameters, 'frequency', 0, 20).onChange(()=>{updateMultiwaveWaves(1, wave2Parameters)})
+wave2Folder.add(wave2Parameters, 'amplitude', 0, 200).onChange(()=>{updateMultiwaveWaves(1, wave2Parameters)})
+wave2Folder.add(wave2Parameters, 'phase', 0, 1).onChange(()=>{updateMultiwaveWavesPhase(1, wave2Parameters.phase)})
+multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:wave2Parameters.amplitude, frequency:wave2Parameters.frequency}))
 
 
 
@@ -50,20 +68,17 @@ function updateMultiwaveWaves(index, newVals){
         drawMultiwave()
 }
 
+function updateMultiwaveWavesPhase(index, newPhase){
+    multiwave.shiftWavePhase(index, newPhase)
+    drawMultiwave()
+}
+
 function drawMultiwave(){
     wp.drawSVG(drawSVGParams_iso)
 }
 
 drawMultiwave()
 
-const gui = new GUI();
-
-
-let wave1Folder = gui.addFolder(`wave 1`)
-wave1Folder.add(wave1Parameters, 'frequency', 0, 20).onChange(()=>{updateMultiwaveWaves(0, wave1Parameters)})
-
-
-let wave2Folder = gui.addFolder(`wave 2`)
 
 
 // const gui = new GUI();

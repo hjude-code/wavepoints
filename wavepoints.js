@@ -59,17 +59,25 @@ export class wave{
             start:0,
             end:1,
             taper:[0, 0]
-        }
+        },
+        phase = 0.5
     }={}){
-        this.resolution = resolution
-        this.length = length
-        this.amplitude = amplitude
-        this.frequency = frequency
+        this.resolution = resolution,
+        this.length = length,
+        this.amplitude = amplitude,
+        this.frequency = frequency,
+        this.phase = phase,
         this.span = span,
-        this.points = this.generateBaseWave({resolution, length, amplitude, frequency})
+        this.points,
+        this.init()
     }
 
-    generateBaseWave({resolution=this.resolution, length=this.length, amplitude=this.amplitude, frequency=this.frequency}={}){
+    init(){
+        this.points = this.generateWave()
+        this.setPhase({oldPhase:0})
+    }
+
+    generateWave({resolution=this.resolution, length=this.length, amplitude=this.amplitude, frequency=this.frequency, phase=this.phase}={}){
         this.points = {}
         let x = 0;
         let step = length/resolution
@@ -104,12 +112,10 @@ export class wave{
             x+=step
             
         }
-
         return points
     }
 
-    updateWave({resolution=this.resolution, length=this.length, amplitude=this.amplitude, frequency=this.frequency}={}){
-        console.log(frequency)
+    updateWave({resolution=this.resolution, length=this.length, amplitude=this.amplitude, frequency=this.frequency, phase=this.phase}={}){
         if(resolution != this.resolution){
             this.resolution = resolution
         }
@@ -121,34 +127,39 @@ export class wave{
         }
         if(frequency != this.frequency){
             this.frequency = Math.floor(frequency)
-            console.log(this.frequency)
+        }
+        if(phase != this.phase){
+            this.phase = phase
         }
 
-        let newPoints = this.generateBaseWave()
+        let newPoints = this.generateWave()
 
-        console.log(newPoints)
         this.points = newPoints
     }
 
-    shiftPhase(shiftBy=0.1){
-        
-        let stepCount = Math.abs(this.resolution*shiftBy)
+    setPhase({oldPhase=this.phase, newPhase=this.phase}={}){
 
-        if(shiftBy > 0){
+        let phaseOfst = newPhase - oldPhase;
+        let stepCount = Math.abs(this.resolution*phaseOfst)
 
+
+        if(phaseOfst > 0){
             for(let i = 0; i < stepCount; i++){
                 let lastPoint = this.points.y.pop()
                 this.points.y.unshift(lastPoint)
             }
 
         }
-        if(shiftBy < 0){
+        if(phaseOfst < 0){
             for(let i = 0; i < stepCount; i++){
                 let firstPoint = this.points.y.shift()
                 this.points.y.push(firstPoint)
             }
         }
+
+        this.phase = newPhase
     }
+
 
 }
 
@@ -225,11 +236,11 @@ export class compoundWave{
         }
     }
 
-    shiftWavePhase(waveIndex, shiftBy){
+    shiftWavePhase(waveIndex, newPhase){
         if(waveIndex >= this.waves.length){
             throw new Error('wave index out of bounds')
         }
-        this.waves[waveIndex].shiftPhase(shiftBy)
+        this.waves[waveIndex].setPhase({newPhase:newPhase})
         this.mergeWaves()
 
     }
