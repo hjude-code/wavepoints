@@ -8,6 +8,13 @@ function createSVGElement(tag) {
 let svg = createSVGElement('svg')
 svg.setAttribute('viewBox', '0 0 400 400')
 svg.setAttribute('id', 'waveBox')
+svg.style.setProperty('height', '100%')
+svg.style.setProperty('max-height', '95vh')
+svg.style.setProperty('position', 'absolute')
+svg.style.setProperty('left', '50%')
+svg.style.setProperty('top', '50%')
+svg.style.setProperty('transform', 'translate(-50%, -50%)')
+
 document.body.appendChild(svg)
 
 const gui = new GUI();
@@ -52,7 +59,16 @@ wave2Folder.add(wave2Parameters, 'amplitude', 0, 200).onChange(()=>{updateMultiw
 wave2Folder.add(wave2Parameters, 'phase', 0, 1).onChange(()=>{updateMultiwaveWavesPhase(1, wave2Parameters.phase)})
 multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:wave2Parameters.amplitude, frequency:wave2Parameters.frequency}))
 
-
+const wave3Parameters = {
+    frequency:3,
+    amplitude:10,
+    phase:0
+  }
+let wave3Folder = gui.addFolder(`wave 2`)
+wave3Folder.add(wave3Parameters, 'frequency', 0, 20).onChange(()=>{updateMultiwaveWaves(2, wave3Parameters)})
+wave3Folder.add(wave3Parameters, 'amplitude', 0, 200).onChange(()=>{updateMultiwaveWaves(2, wave3Parameters)})
+wave3Folder.add(wave3Parameters, 'phase', 0, 1).onChange(()=>{updateMultiwaveWavesPhase(2, wave3Parameters.phase)})
+multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:wave3Parameters.amplitude, frequency:wave3Parameters.frequency}))
 
 let drawSVGParams_iso = {
     wave:multiwave,

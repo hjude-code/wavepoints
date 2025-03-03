@@ -115,7 +115,7 @@ export class wave{
         return points
     }
 
-    updateWave({resolution=this.resolution, length=this.length, amplitude=this.amplitude, frequency=this.frequency, phase=this.phase}={}){
+    updateWave({resolution=this.resolution, length=this.length, amplitude=this.amplitude, frequency=this.frequency}={}){
         if(resolution != this.resolution){
             this.resolution = resolution
         }
@@ -128,13 +128,11 @@ export class wave{
         if(frequency != this.frequency){
             this.frequency = Math.floor(frequency)
         }
-        if(phase != this.phase){
-            this.phase = phase
-        }
 
         let newPoints = this.generateWave()
 
         this.points = newPoints
+        this.setPhase({oldPhase:0})
     }
 
     setPhase({oldPhase=this.phase, newPhase=this.phase}={}){
@@ -299,7 +297,10 @@ export function drawSVG({
             r:3
         }
     },
-    attributes={},
+    attributes={
+        strokeWeight:2,
+        strokeColor:'black'
+    },
     position={
         cx:0, cy:0
     },
