@@ -39,35 +39,56 @@ let waveLength = 300
 const wave1Parameters = {
     frequency:3,
     amplitude:30,
-    phase:0
+    phase:0,
+    span:{
+        start:0,
+        end:1,
+        taper:[0.25,0.25]
+    }
 }
 let wave1Folder = gui.addFolder(`wave 1`)
 wave1Folder.add(wave1Parameters, 'frequency', 0, 20).onChange(()=>{updateMultiwaveWaves(0, wave1Parameters)})
 wave1Folder.add(wave1Parameters, 'amplitude', 0, 200).onChange(()=>{updateMultiwaveWaves(0, wave1Parameters)})
 wave1Folder.add(wave1Parameters, 'phase', 0, 1).onChange(()=>{updateMultiwaveWavesPhase(0, wave1Parameters.phase)})
-multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:wave1Parameters.amplitude, frequency:wave1Parameters.frequency}))
+wave1Folder.add(wave1Parameters.span, 'start', 0, 1).onChange(()=>{updateMultiwaveWaves(0, wave1Parameters)})
+wave1Folder.add(wave1Parameters.span, 'end', 0, 1).onChange(()=>{updateMultiwaveWaves(0, wave1Parameters)})
+multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, span:wave1Parameters.span, amplitude:wave1Parameters.amplitude, frequency:wave1Parameters.frequency}))
 
 
 const wave2Parameters = {
     frequency:3,
-    amplitude:10,
-    phase:0
+    amplitude:0,
+    phase:0,
+    span:{
+        start:0,
+        end:1,
+        taper:[0.25,0.25]
+    }
   }
 let wave2Folder = gui.addFolder(`wave 2`)
 wave2Folder.add(wave2Parameters, 'frequency', 0, 20).onChange(()=>{updateMultiwaveWaves(1, wave2Parameters)})
 wave2Folder.add(wave2Parameters, 'amplitude', 0, 200).onChange(()=>{updateMultiwaveWaves(1, wave2Parameters)})
 wave2Folder.add(wave2Parameters, 'phase', 0, 1).onChange(()=>{updateMultiwaveWavesPhase(1, wave2Parameters.phase)})
+wave2Folder.add(wave2Parameters.span, 'start', 0, 1).onChange(()=>{updateMultiwaveWaves(1, wave2Parameters)})
+wave2Folder.add(wave2Parameters.span, 'end', 0, 1).onChange(()=>{updateMultiwaveWaves(1, wave2Parameters)})
 multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:wave2Parameters.amplitude, frequency:wave2Parameters.frequency}))
 
 const wave3Parameters = {
     frequency:3,
-    amplitude:10,
-    phase:0
+    amplitude:0,
+    phase:0,
+    span:{
+        start:0,
+        end:1,
+        taper:[0.25,0.25]
+    }
   }
 let wave3Folder = gui.addFolder(`wave 2`)
 wave3Folder.add(wave3Parameters, 'frequency', 0, 20).onChange(()=>{updateMultiwaveWaves(2, wave3Parameters)})
 wave3Folder.add(wave3Parameters, 'amplitude', 0, 200).onChange(()=>{updateMultiwaveWaves(2, wave3Parameters)})
 wave3Folder.add(wave3Parameters, 'phase', 0, 1).onChange(()=>{updateMultiwaveWavesPhase(2, wave3Parameters.phase)})
+wave3Folder.add(wave3Parameters.span, 'start', 0, 1).onChange(()=>{updateMultiwaveWaves(2, wave3Parameters)})
+wave3Folder.add(wave3Parameters.span, 'end', 0, 1).onChange(()=>{updateMultiwaveWaves(2, wave3Parameters)})
 multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:wave3Parameters.amplitude, frequency:wave3Parameters.frequency}))
 
 let drawSVGParams_iso = {
