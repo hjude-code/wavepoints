@@ -91,14 +91,15 @@ wave3Folder.add(wave3Parameters.span, 'start', 0, 1).onChange(()=>{updateMultiwa
 wave3Folder.add(wave3Parameters.span, 'end', 0, 1).onChange(()=>{updateMultiwaveWaves(2, wave3Parameters)})
 multiwave.addWave(new wp.wave({resolution:waveResolution, length:waveLength, amplitude:wave3Parameters.amplitude, frequency:wave3Parameters.frequency}))
 
-let drawSVGParams_iso = {
+let drawSVGParams = {
     wave:multiwave,
     containerID: '#waveBox',
     type: 'path',
     position: {cx: 200, cy: 200},
 }
-
-// wp.drawSVG(drawSVGParams_iso)
+let compoundWaveFolder = gui.addFolder(`Compound Wave`)
+compoundWaveFolder.add(drawSVGParams.position, 'cx', 0, 400).onChange(()=>{drawMultiwave()})
+compoundWaveFolder.add(drawSVGParams.position, 'cy', 0, 400).onChange(()=>{drawMultiwave()})
 
 function updateMultiwaveWaves(index, newVals){
         multiwave.updateChildWave(index, newVals)
@@ -111,7 +112,7 @@ function updateMultiwaveWavesPhase(index, newPhase){
 }
 
 function drawMultiwave(){
-    wp.drawSVG(drawSVGParams_iso)
+    wp.drawSVG(drawSVGParams)
 }
 
 drawMultiwave()
