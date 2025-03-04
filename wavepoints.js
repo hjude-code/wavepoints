@@ -117,7 +117,6 @@ export class wave{
     }
 
     updateWave({resolution=this.resolution, length=this.length, span=this.span, amplitude=this.amplitude, frequency=this.frequency}={}){
-        console.log(span)
         
         if(resolution != this.resolution){
             this.resolution = resolution
@@ -133,7 +132,6 @@ export class wave{
         }
         if(span != this.span){
             this.span = span
-            console.log('new span')
         }
 
         let newPoints = this.generateWave()
