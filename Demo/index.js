@@ -96,11 +96,18 @@ let drawSVGParams = {
     containerID: '#waveBox',
     type: 'path',
     position: {cx: 200, cy: 200},
+    attributes:{
+        stroke:'black',
+        fill:'#ffffff',
+        'stroke-width':2
+    }
 }
 let compoundWaveFolder = gui.addFolder(`Compound Wave`)
 compoundWaveFolder.add(drawSVGParams.position, 'cx', 0, 400).onChange(()=>{drawMultiwave()})
 compoundWaveFolder.add(drawSVGParams.position, 'cy', 0, 400).onChange(()=>{drawMultiwave()})
 compoundWaveFolder.add(drawSVGParams, 'type', ['instances', 'path']).onChange(()=>{drawMultiwave()})
+compoundWaveFolder.add(drawSVGParams.attributes, 'stroke-width', 0, 10).onChange(()=>{drawMultiwave()})
+compoundWaveFolder.addColor(drawSVGParams.attributes, 'fill').onChange(()=>{drawMultiwave()})
 
 
 function updateMultiwaveWaves(index, newVals){

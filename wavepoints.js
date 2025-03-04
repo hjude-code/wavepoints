@@ -362,7 +362,6 @@ export function drawSVG({
                 setSVGAttributes(instance, instances.attributes)
                 instance.setAttribute('cx', points[i][0])
                 instance.setAttribute('cy', points[i][1])
-                instance.setAttribute('fill', 'red')
                 
                 container.appendChild(instance)
             }
