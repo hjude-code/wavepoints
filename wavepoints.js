@@ -306,7 +306,7 @@ export function drawSVG({
     instances={
         tag:'circle',
         attributes:{
-            r:3
+            r:3,
         }
     },
     attributes={
