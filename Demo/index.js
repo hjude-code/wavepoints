@@ -100,6 +100,8 @@ let drawSVGParams = {
 let compoundWaveFolder = gui.addFolder(`Compound Wave`)
 compoundWaveFolder.add(drawSVGParams.position, 'cx', 0, 400).onChange(()=>{drawMultiwave()})
 compoundWaveFolder.add(drawSVGParams.position, 'cy', 0, 400).onChange(()=>{drawMultiwave()})
+compoundWaveFolder.add(drawSVGParams, 'type', ['instances', 'path']).onChange(()=>{drawMultiwave()})
+
 
 function updateMultiwaveWaves(index, newVals){
         multiwave.updateChildWave(index, newVals)

@@ -293,20 +293,26 @@ export function generateCircularWavePoints({wave, cx=0, cy=0, radius=100}={}){
 
 }
 
+function setSVGAttributes(element, attributes){
+    for(const key in attributes){
+        element.setAttribute(key, attributes[key])
+    }
+}
 
 export function drawSVG({
     wave,
     form='circle',
     type='path',
-    instance={
+    instances={
         tag:'circle',
         attributes:{
             r:3
         }
     },
     attributes={
-        strokeWeight:2,
-        strokeColor:'black'
+        fill:'none',
+        stroke:'black',
+        'stroke-width':1
     },
     position={
         cx:0, cy:0
@@ -330,9 +336,7 @@ export function drawSVG({
 
         if(type === 'path'){
             let path = createSVGElement('path')
-            path.setAttribute('fill', 'none')
-            path.setAttribute('stroke', 'black')
-            path.setAttribute('stroke-width', 1)
+            setSVGAttributes(path, attributes)
             let d = ''
 
             points.forEach((point, i)=>{
@@ -353,8 +357,9 @@ export function drawSVG({
 
         if(type === 'instances'){
             for(let i = 0; i < wave.resolution; i++){
-                let instance = createSVGElement('circle')
-                instance.setAttribute('r', 3)
+                let instance = createSVGElement(instances.tag)
+                setSVGAttributes(instance, attributes)
+                setSVGAttributes(instance, instances.attributes)
                 instance.setAttribute('cx', points[i][0])
                 instance.setAttribute('cy', points[i][1])
                 instance.setAttribute('fill', 'red')
