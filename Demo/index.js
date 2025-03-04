@@ -43,7 +43,7 @@ const wave1Parameters = {
     span:{
         start:0,
         end:1,
-        taper:[0.25,0.25]
+        taper:[0,0]
     }
 }
 let wave1Folder = gui.addFolder(`wave 1`)
@@ -62,7 +62,7 @@ const wave2Parameters = {
     span:{
         start:0,
         end:1,
-        taper:[0.25,0.25]
+        taper:[0,0]
     }
   }
 let wave2Folder = gui.addFolder(`wave 2`)
@@ -80,7 +80,7 @@ const wave3Parameters = {
     span:{
         start:0,
         end:1,
-        taper:[0.25,0.25]
+        taper:[0,0]
     }
   }
 let wave3Folder = gui.addFolder(`wave 2`)
