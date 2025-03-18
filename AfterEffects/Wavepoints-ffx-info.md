@@ -1,9 +1,3 @@
----
-title: Wavepoints.ffx
-created: '2025-03-18T13:41:06.198Z'
-modified: '2025-03-18T14:46:53.785Z'
----
-
 # Wavepoints.ffx
 
 ## Effect Overview
