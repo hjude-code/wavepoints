@@ -238,9 +238,6 @@ export class wavePath{
         this.path = path,
         this.wave = new compoundWave()
     }
-
-
-    
     
 
 }
