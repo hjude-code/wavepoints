@@ -48,123 +48,172 @@ export function generateWaveHeight(percent, amplitude, frequency){
     let waveHeightValue = Math.sin(radians(angle)*frequency) * amplitude
     return Number(waveHeightValue.toFixed(3))
 }
- 
-export class wave{
-    constructor({
-        resolution=10,
-        length=100,
-        amplitude=10,
-        frequency=3,
-        span={
-            start:0,
-            end:1,
-            taper:[0, 0]
+
+export const wave = (frequency = 1, amplitude = 1, phase = 0) =>{
+
+    const values = {
+        frequency, amplitude, phase
+    }
+
+    return {
+        get frequency(){
+            return values.frequency
         },
-        phase = 0.5
-    }={}){
-        this.resolution = resolution,
-        this.length = length,
-        this.amplitude = amplitude,
-        this.frequency = frequency,
-        this.phase = phase,
-        this.span = span,
-        this.points,
-        this.init()
-    }
-
-    init(){
-        this.points = this.generateWave()
-        this.setPhase({oldPhase:0})
-    }
-
-    generateWave({resolution=this.resolution, length=this.length, amplitude=this.amplitude, frequency=this.frequency, phase=this.phase}={}){
-        this.points = {}
-        let x = 0;
-        let step = length/resolution
-
-        let startWave = resolution*this.span.start
-        let endWave = resolution*this.span.end
-        let waveLength = endWave-startWave
-        let points = {
-            x: [],
-            y: []
-        };
-
-        for(let i = 0; i < resolution; i++){
-           
-
-            let y = 0
-            if(i >= startWave && i <= endWave){
-                let percent = Math.abs(startWave-i) /waveLength * 100
-                let yMax = generateWaveHeight(percent, amplitude, frequency)
-
-                y = taper({
-                    range: [startWave, endWave],
-                    taper: this.span.taper,
-                    outMin: yMax,
-                    outMax: 0,
-                    input: i
-                })
+        set frequency(newFrequency){
+            if(newFrequency){
+                typeof newFrequency == "number" ? values.frequency = newFrequency : console.warn('frequency not updated. must be number value')
+            }else{
+                console.warn('Frequency not updated. No value provided')
             }
+        },
 
-            points.x.push(x)
-            points.y.push(y)
-            x+=step
-            
-        }
-
-        return points
-    }
-
-    updateWave({resolution=this.resolution, length=this.length, span=this.span, amplitude=this.amplitude, frequency=this.frequency}={}){
-        
-        if(resolution != this.resolution){
-            this.resolution = resolution
-        }
-        if(length != this.length){
-            this.length = length
-        }
-        if(amplitude != this.amplitude){
-            this.amplitude = amplitude
-        }
-        if(frequency != this.frequency){
-            this.frequency = Math.floor(frequency)
-        }
-        if(span != this.span){
-            this.span = span
-        }
-
-        let newPoints = this.generateWave()
-
-        this.points = newPoints
-        this.setPhase({oldPhase:0})
-    }
-
-    setPhase({oldPhase=this.phase, newPhase=this.phase}={}){
-
-        let phaseOfst = newPhase - oldPhase;
-        let stepCount = Math.abs(this.resolution*phaseOfst)
-
-
-        if(phaseOfst > 0){
-            for(let i = 0; i < stepCount; i++){
-                let lastPoint = this.points.y.pop()
-                this.points.y.unshift(lastPoint)
+        get amplitude(){
+            return values.amplitude
+        },
+        set amplitude(newAmplitude){
+            if(newAmplitude){
+                typeof newAmplitude == "number" ? values.amplitude = newAmplitude : console.warn('amplitude not updated. must be number value')
+            }else{
+                console.warn('Amplitude not updated. No value provided')
             }
+        },
 
-        }
-        if(phaseOfst < 0){
-            for(let i = 0; i < stepCount; i++){
-                let firstPoint = this.points.y.shift()
-                this.points.y.push(firstPoint)
+        get phase(){
+            return values.phase
+        },
+        set phase(newPhase){
+            if(newPhase){
+                typeof newPhase == "number" ? values.phase = newPhase : console.warn('phase not updated. must be number value')
+            }else{
+                console.warn('Phase not updated. No value provided')
             }
+        },
+        shiftPhase(offset = 0.1){
+            typeof offset == "number" ? this.phase += offset : console.warn('shiftPhase() requires number value')
+        },
+        get values(){
+            return values
         }
-
-        this.phase = newPhase
     }
-
 
 }
+
+// export class wave{
+//     constructor({
+//         resolution=10,
+//         length=100,
+//         amplitude=10,
+//         frequency=3,
+//         span={
+//             start:0,
+//             end:1,
+//             taper:[0, 0]
+//         },
+//         phase = 0.5
+//     }={}){
+//         this.resolution = resolution,
+//         this.length = length,
+//         this.amplitude = amplitude,
+//         this.frequency = frequency,
+//         this.phase = phase,
+//         this.span = span,
+//         this.points,
+//         this.init()
+//     }
+
+//     init(){
+//         this.points = this.generateWave()
+//         this.setPhase({oldPhase:0})
+//     }
+
+//     generateWave({resolution=this.resolution, length=this.length, amplitude=this.amplitude, frequency=this.frequency, phase=this.phase}={}){
+//         this.points = {}
+//         let x = 0;
+//         let step = length/resolution
+
+//         let startWave = resolution*this.span.start
+//         let endWave = resolution*this.span.end
+//         let waveLength = endWave-startWave
+//         let points = {
+//             x: [],
+//             y: []
+//         };
+
+//         for(let i = 0; i < resolution; i++){
+           
+
+//             let y = 0
+//             if(i >= startWave && i <= endWave){
+//                 let percent = Math.abs(startWave-i) /waveLength * 100
+//                 let yMax = generateWaveHeight(percent, amplitude, frequency)
+
+//                 y = taper({
+//                     range: [startWave, endWave],
+//                     taper: this.span.taper,
+//                     outMin: yMax,
+//                     outMax: 0,
+//                     input: i
+//                 })
+//             }
+
+//             points.x.push(x)
+//             points.y.push(y)
+//             x+=step
+            
+//         }
+
+//         return points
+//     }
+
+//     updateWave({resolution=this.resolution, length=this.length, span=this.span, amplitude=this.amplitude, frequency=this.frequency}={}){
+        
+//         if(resolution != this.resolution){
+//             this.resolution = resolution
+//         }
+//         if(length != this.length){
+//             this.length = length
+//         }
+//         if(amplitude != this.amplitude){
+//             this.amplitude = amplitude
+//         }
+//         if(frequency != this.frequency){
+//             this.frequency = Math.floor(frequency)
+//         }
+//         if(span != this.span){
+//             this.span = span
+//         }
+
+//         let newPoints = this.generateWave()
+
+//         this.points = newPoints
+//         this.setPhase({oldPhase:0})
+//     }
+
+//     setPhase({oldPhase=this.phase, newPhase=this.phase}={}){
+
+//         let phaseOfst = newPhase - oldPhase;
+//         let stepCount = Math.abs(this.resolution*phaseOfst)
+
+
+//         if(phaseOfst > 0){
+//             for(let i = 0; i < stepCount; i++){
+//                 let lastPoint = this.points.y.pop()
+//                 this.points.y.unshift(lastPoint)
+//             }
+
+//         }
+//         if(phaseOfst < 0){
+//             for(let i = 0; i < stepCount; i++){
+//                 let firstPoint = this.points.y.shift()
+//                 this.points.y.push(firstPoint)
+//             }
+//         }
+
+//         this.phase = newPhase
+//     }
+
+
+// }
 
 export class compoundWave{
     constructor(){
