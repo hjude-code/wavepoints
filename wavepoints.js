@@ -7,6 +7,33 @@ function lerp(start, end, t) {
 return (1 - t) * start + t * end;
 }
 
+function isCoordinateArray(input, issue='error'){
+
+    let valid = true
+
+    if(typeof input !== 'object'){
+        console.warn('input must be an object')
+        valid = false
+    }
+
+    if(input.length !== 2){
+        console.warn('input must have a length of 2')
+        valid = false
+    }
+
+    if(typeof input[0] !== 'number'){
+        console.warn('input[0] must be a number')
+        valid = false
+    }
+
+    if(typeof input[1] !== 'number'){
+        console.warn('input[1] must be a number')
+        valid = false
+    }
+    
+    return valid
+}
+
 export function taper({
     range = [0, 100],
     taper = [0.25, 0.25],
@@ -38,7 +65,6 @@ export function taper({
 
 
 }
-
 
 
 
@@ -99,6 +125,64 @@ primitive.wave = (frequency = 1, amplitude = 1, phase = 0) =>{
     }
 
 }
+
+primitive.linearPath = (x1=0, y1=0, x2=100, y2=100, resolution=10) =>{
+
+    function invalid(){
+        console.error('all values must be numbers')
+    }
+
+    const values = {
+        x1: typeof x1 == 'number' ? x1 : invalid(),
+        y1: typeof y1 == 'number' ? y1 : invalid(),
+        x2: typeof x2 == 'number' ? x2 : invalid(),
+        y2: typeof y2 == 'number' ? y2 : invalid(),
+        resolution: typeof resolution == 'number' ? resolution : invalid()
+    }
+
+    return {
+        get start(){
+            return{
+                x:values.x1,
+                y:values.y1
+            }
+        },
+        set startX(newStartX){
+            if(newStartX){
+                typeof newStartX == 'number' ? values.x1 = newStartX : console.warn('start x not updated, must be number value') 
+            }
+        },
+        set startY(newStartY){
+            if(newStartY){
+                typeof newStartY == 'number' ? values.y1 = newStartY : console.warn('start y not updated, must be number value') 
+            }
+        },
+        set start(newStart){
+            if(newStart){
+                if(isCoordinateArray(newStart)){
+                    values.x1 = newStart[0]
+                    values.y1 = newStart[1]
+                }
+            }
+        },
+
+        get end(){
+            return{
+                x:values.x2,
+                y:values.y2
+            }
+        },
+        set end(newEnd){
+            if(newEnd){
+                if(isCoordinateArray(newEnd)){
+                    values.x2 = newEnd[0]
+                    values.y2 = newEnd[1]
+                }
+            }
+        },
+    }
+}
+
 
 // export class wave{
 //     constructor({
@@ -220,17 +304,32 @@ primitive.wave = (frequency = 1, amplitude = 1, phase = 0) =>{
 export class compoundWave{
     constructor(){
         this.waves = []
-        let phase = 0
+        this.phase = this.setPhase()
     }
 
-    get phase(){
-        return phase
+    
+    setPhase(newPhase = 0){
+        typeof newPhase == "number" ? this.phase = newPhase : console.warn('Phase not updated, number value required') 
+    }
+    shiftPhase(offset = 0.1){
+        typeof offset == "number" ? this.phase += offset : console.warn('shiftPhase() requires number value')
     }
 
     addWave(frequency=1, amplitude=1, phase=0){
         this.waves.push( primitive.wave(frequency, amplitude, phase) )
     }
 
+    calcOffset(percent = 0.5){
+        let phase = percent + this.phase
+        let offset = 0
+
+        this.waves.forEach((wave)=>{
+            const angle = radians( 360 * (phase + wave.phase) )
+            offset += Math.cos(angle) * wave.amplitude
+        })
+
+        return offset
+    }
 }
 
 export class wavePath{
@@ -238,6 +337,8 @@ export class wavePath{
         this.path = path,
         this.wave = new compoundWave()
     }
+
+
     
 
 }

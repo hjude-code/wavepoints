@@ -23,13 +23,21 @@ import * as wp from '../wavepoints.js';
 const newCompoundWave = new wp.compoundWave()
 newCompoundWave.addWave()
 
-console.log(newCompoundWave)
+// console.log(newCompoundWave)
 
-const wavePath = new wp.wavePath()
+// const wavePath = new wp.wavePath()
 
-console.log(wavePath)
+// console.log(wavePath)
 
+const linearPath = wp.primitive.linearPath()
 
+console.log(linearPath.start)
+linearPath.start = [1, 1]
+console.log(linearPath.start)
+
+console.log(linearPath.end)
+linearPath.end = [1, 1]
+console.log(linearPath.end)
 
 
 
