@@ -20,20 +20,11 @@ import * as wp from '../wavepoints.js';
 // const gui = new GUI();
 
 
-const newWave = wp.wave(1, 3, 0)
-// newWave.shiftPhase(0)
+const newCompoundWave = new wp.compoundWave()
 
-newWave.frequency = 5
-console.log('frequency:', newWave.frequency)
+const wavePath = new wp.wavePath()
 
-newWave.amplitude = 1
-console.log('amplitude', newWave.amplitude)
-
-newWave.phase = 3
-console.log(newWave.frequency)
-newWave.shiftPhase()
-
-console.log(newWave.values)
+console.log(wavePath)
 
 
 

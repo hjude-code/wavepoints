@@ -218,103 +218,21 @@ export const wave = (frequency = 1, amplitude = 1, phase = 0) =>{
 export class compoundWave{
     constructor(){
         this.waves = []
-        this.points = null
-        this.resolution = null
-        this.length = null
     }
 
-    addWave(wave){
-
-        if(!wave){
-            throw new Error('wave is required')
-        }
-
-        if(this.points != null && this.length != null && this.resolution != null){
-            if(wave.resolution !== this.resolution){
-                throw new Error(`wave resolution must equal ${this.resolution}. new wave resolution is ${wave.resolution}`)
-            }
-            if(wave.length !== this.length){
-                throw new Error('wave length must be the same as compoundWave length')
-            }
-            this.waves.push(wave)
-            this.mergeWaves()
-        }
-        else{
-            this.createWave(wave)
-        }
-    }
-
-    createWave(wave){
-        this.resolution = wave.resolution
-        this.length = wave.length
-        this.points = {
-            x: wave.points.x.map(point => point),
-            y: wave.points.y.map(point => point)
-        };
-        this.waves.push(wave)
-    }
-
-    mufflePoints(muffle){
-        this.muffle = muffle
-        this.mergeWaves()
-    }
-
-    mergeWaves(){
-
-        let newYPoints = []
-
-
-        this.waves.forEach((wave, i)=>{
-
-            let wavePoints = wave.points.y
-
-            if(wave.muffle){
-                wavePoints = mufflePoints(wave)
-            }
-
-            let addedPoints = wavePoints.map((point, i)=>{
-                let newPoint = point + (newYPoints[i] ? newYPoints[i] : 0)
-                return Number(newPoint.toFixed(3))
-            })
-
-            newYPoints = addedPoints
-        })
-
-        this.points.y = []
-        this.points.y = newYPoints
-
-        if(this.muffle && this.muffle.length > 0){
-            this.points. y = mufflePoints(this, this.muffle)
-        }
-    }
-
-    shiftWavePhase(waveIndex, newPhase){
-        if(waveIndex >= this.waves.length){
-            throw new Error('wave index out of bounds')
-        }
-        this.waves[waveIndex].setPhase({newPhase:newPhase})
-        this.mergeWaves()
-
-    }
-
-    muffleWavePoints(waveIndex, muffle){
-        this.waves[waveIndex].muffle = muffle
-        this.mergeWaves()
-    }
-
-    updateChildWave(waveIndex, params){
-        this.waves[waveIndex].updateWave(params)
-        this.mergeWaves()
-    }
-
-    updateResolution(newResolution){
-        this.resolution = newResolution
-        this.waves.forEach((wave)=>{
-            wave.resolution = this.resolution
-        })
+    addWave(frequency=1, amplitude=1, phase=0){
+        this.waves.push( wave(frequency, amplitude, phase) )
     }
 
 }
+
+export class wavePath{
+    constructor(path){
+        this.path = path,
+        this.wave = new compoundWave()
+    }
+}
+
 
 export function generateCircularWavePoints({wave, cx=0, cy=0, radius=100}={}){
         
