@@ -21,6 +21,9 @@ import * as wp from '../wavepoints.js';
 
 
 const newCompoundWave = new wp.compoundWave()
+newCompoundWave.addWave()
+
+console.log(newCompoundWave)
 
 const wavePath = new wp.wavePath()
 

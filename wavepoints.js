@@ -49,7 +49,9 @@ export function generateWaveHeight(percent, amplitude, frequency){
     return Number(waveHeightValue.toFixed(3))
 }
 
-export const wave = (frequency = 1, amplitude = 1, phase = 0) =>{
+export const primitive = {}
+
+primitive.wave = (frequency = 1, amplitude = 1, phase = 0) =>{
 
     const values = {
         frequency, amplitude, phase
@@ -218,10 +220,15 @@ export const wave = (frequency = 1, amplitude = 1, phase = 0) =>{
 export class compoundWave{
     constructor(){
         this.waves = []
+        let phase = 0
+    }
+
+    get phase(){
+        return phase
     }
 
     addWave(frequency=1, amplitude=1, phase=0){
-        this.waves.push( wave(frequency, amplitude, phase) )
+        this.waves.push( primitive.wave(frequency, amplitude, phase) )
     }
 
 }
@@ -231,6 +238,11 @@ export class wavePath{
         this.path = path,
         this.wave = new compoundWave()
     }
+
+
+    
+    
+
 }
 
 
