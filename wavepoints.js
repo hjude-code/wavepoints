@@ -48,7 +48,7 @@ export function generateWaveHeight(percent, amplitude, frequency){
     let waveHeightValue = Math.sin(radians(angle)*frequency) * amplitude
     return Number(waveHeightValue.toFixed(3))
 }
-
+ 
 export class wave{
     constructor({
         resolution=10,
